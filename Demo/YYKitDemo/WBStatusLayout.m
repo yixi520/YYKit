@@ -646,7 +646,7 @@
 
 
 
-
+// 微博内容文本的处理 -- 生成 NSMutableAttributedString
 - (NSMutableAttributedString *)_textWithStatus:(WBStatus *)status
                                      isRetweet:(BOOL)isRetweet
                                       fontSize:(CGFloat)fontSize
@@ -673,6 +673,7 @@
     highlightBorder.cornerRadius = 3;
     highlightBorder.fillColor = kWBCellTextHighlightBackgroundColor;
     
+    // 开始生成文本
     NSMutableAttributedString *text = [[NSMutableAttributedString alloc] initWithString:string];
     text.font = font;
     text.color = textColor;
@@ -682,6 +683,8 @@
         if (wburl.shortURL.length == 0) continue;
         if (wburl.urlTitle.length == 0) continue;
         NSString *urlTitle = wburl.urlTitle;
+        NSLog(@"urlTitle= %@",urlTitle);
+        NSLog(@"shortURL= %@",wburl.shortURL);
         if (urlTitle.length > 27) {
             urlTitle = [[urlTitle substringToIndex:27] stringByAppendingString:YYTextTruncationToken];
         }
@@ -690,7 +693,7 @@
             NSRange range = [text.string rangeOfString:wburl.shortURL options:kNilOptions range:searchRange];
             if (range.location == NSNotFound) break;
             
-            if (range.location + range.length == text.length) {
+            if (range.location + range.length == text.length) {// 最后一个
                 if (status.pageInfo.pageID && wburl.pageID &&
                     [wburl.pageID isEqualToString:status.pageInfo.pageID]) {
                     if ((!isRetweet && !status.retweetedStatus) || isRetweet) {
